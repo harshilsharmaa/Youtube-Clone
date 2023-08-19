@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {YOUTUBE_API} from '../utils/constants';
 import VideoCard from './VideoCard';
 import { Link } from 'react-router-dom';
+import HomePageShimmer from './HomePageShimmer';
 
 const VideoContainer = () => {
 
@@ -18,18 +19,21 @@ const VideoContainer = () => {
     getVideos();
   },[])
 
+  if(videos===null || videos.length===0){
+    return (
+      <HomePageShimmer/>
+    )
+  }
+
   return (
-    <div className='w-full flex flex-wrap pt-2 ps-4'>
-     {/* {
-       videos.length>0 && <VideoCard info={videos[0]}/>
-    }  */}
+    <div className='w-full flex flex-wrap justify-evenly pt-2 ps-4'>
       {
         videos.length>0 &&
 
         videos.map((item)=>{
           return(
-            <Link to={`/watch?v=${item.id}`}>
-              <VideoCard info={item} key={item.id}/>
+            <Link key={item.id} to={`/watch?v=${item.id}`}>
+              <VideoCard info={item} />
             </Link>
           )
         })
