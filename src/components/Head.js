@@ -3,6 +3,7 @@ import { toogleMenu } from "../utils/slices/appSlice";
 import {useDispatch, useSelector } from 'react-redux'
 import { SEARCH_SUGGESTION } from "../utils/constants";
 import { cacheResults } from "../utils/slices/searchSlice";
+import { useNavigate } from "react-router-dom";
 
 const Head = () => {
 
@@ -13,6 +14,7 @@ const Head = () => {
   const searchCache = useSelector((store)=>store.search);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const getSuggestions = async()=>{
 
@@ -62,18 +64,18 @@ const Head = () => {
         value={searchQuery}
         onChange={(e)=>setSearchQuery(e.target.value)}
         onFocus={()=>setShowSuggestions(true)}
-        onBlur={()=>setShowSuggestions(false)}
+        // onBlur={()=>setShowSuggestions(false)}
         />
         <button className="py-2 px-3 rounded-r-full border border-gray-200">🔍</button>
 
         {
         // absolute top-14
           suggestions && showSuggestions && searchQuery.length>0?
-          <div className="absolute top-16 w-[28rem] mr-20 bg-white rounded-lg border border-gray-200">
+          <div className="absolute top-16 w-[28rem] mr-20 bg-white rounded-lg border border-gray-200" onBlur={()=>setShowSuggestions(false)}>
             {
               suggestions.map((suggestion, index)=>{
                 return(
-                  <div key={index} className="flex items-center p-2 hover:bg-gray-100">
+                  <div onClick={()=>{setShowSuggestions(false);navigate(`/results?search_query=${suggestion}`)}} key={index} className="flex items-center p-2 hover:bg-gray-100">
                     <h3>🔍</h3>
                     <h3 className="text-gray-600 text-sm ml-3"> {suggestion}</h3>
                   </div>
